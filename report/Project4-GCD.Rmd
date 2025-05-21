@@ -1,0 +1,431 @@
+---
+title: "Project4-GCD"
+author: "Rachana Pandey"
+date: "2025-04-29"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, eval= FALSE}
+install.packages("susieR")
+install.packages("data.table")
+```
+
+```{r}
+library(dplyr)
+library(susieR)
+library(data.table)
+library(ggplot2)
+```
+# Project Title- Polygenic Risk Score Analysis and Fine-Mapping of Height-associated Variants Across European and African Population
+```{r, eval=FALSE}
+#Downloading the GWAS summary statisticss from GIANT consortium
+wget https://portals.broadinstitute.org/collaboration/giant/images/4/4e/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_ALL.gz
+gunzip GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_ALL.gz 
+
+wget https://portals.broadinstitute.org/collaboration/giant/images/6/6f/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_AA.gz
+GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_AA.gz 
+
+wget https://portals.broadinstitute.org/collaboration/giant/images/f/f7/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR.gz
+gunzip GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR.gz
+```
+
+```{r}
+#Reading the summary statistics from all file
+gwas_all <- fread("./GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_ALL")
+head(gwas_all)
+```
+
+```{r}
+colnames(gwas_all)
+```
+
+```{r}
+#1. we will first visualize the overall GWAS result for all ancestry using the manhatton plot
+#converting the p value into numeric incase it is not
+gwas_all$P<- as.numeric(gwas_all$P)
+
+#Manhattan plot
+manhat<-ggplot(gwas_all, aes(x = POS, y = -log10(P))) +
+  geom_point(alpha = 0.5, size = 0.6) +
+  facet_wrap(~CHR, scales = "free_x", nrow = 2) +
+  geom_hline(yintercept = -log10(5e-8), color = "red") +
+  theme_classic() +
+  labs(title = "Manhattan Plot for Height GWAS",
+       x = "Genomic Position",
+       y = expression(-log[10](p-value))) +
+  theme(axis.text.x = element_blank(),
+        panel.spacing = unit(0.3, "lines")) + 
+   theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+ggsave(filename = "./visualization/Manhattan_plot_for_all_chromosomes_GWAS.pdf",
+       plot = manhat,
+       width = 12, height = 10)
+manhat
+```
+
+```{r}
+#Lets make QQ plot as well
+# Sort by p-value
+gwas_all <- gwas_all[order(P)]
+
+# Expected p-values under null
+gwas_all$expected <- -log10(ppoints(nrow(gwas_all)))
+
+# Observed p-values
+gwas_all$observed <- -log10(gwas_all$P)
+
+# QQ plot
+qq_plot<-ggplot(gwas_all, aes(x = expected, y = observed)) +
+  geom_point(alpha = 0.5, size = 0.6) +
+  geom_abline(slope = 1, intercept = 0, color = "red") +
+  theme_classic() +
+  labs(title = "QQ Plot for Height GWAS",
+       x = "Expected -log10(p)",
+       y = "Observed -log10(p)") + 
+   theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename = "./visualization/QQplot_for_all_chromosomes_GWAS.pdf",
+       plot = qq_plot,
+       width = 10, height = 8)
+qq_plot
+```
+
+```{r}
+# Read in EUR and AFR GWAS files
+eur <- fread("./GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR")
+afr <- fread("./GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_AA")
+
+head(eur)
+```
+
+```{r}
+head(afr)
+```
+
+```{r}
+#Removing duplicate just to ensure
+# For EUR GWAS
+eur<- eur %>%
+  filter(!duplicated(RSID))
+
+# For AFR GWAS
+afr<- afr %>%
+  filter(!duplicated(RSID))
+
+#Merge european and african dataset
+# Merge based on SNP ID
+merged <- inner_join(eur, afr, by = "RSID", suffix = c("_EUR", "_AFR"))
+
+# Calculate effect size difference
+merged <- merged %>%
+  mutate(beta_diff = BETA_EUR - BETA_AFR)
+
+#Visualize differences- how much individual SNP associations differ between EUR and AFR
+height_effect_size<- ggplot(merged, aes(x = beta_diff)) +
+  geom_histogram(bins = 100, fill = "steelblue", color = "black") +
+  labs(title = "Distribution of Height Effect Size Differences (EUR vs AFR)",
+       x = "Effect Size Difference (Beta_EUR - Beta_AFR)",
+       y = "Count") + 
+   theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename = "./visualization/Distribution of Height Effect Size Differences.pdf",
+       plot = height_effect_size,
+       width = 10, height = 8)
+height_effect_size
+```
+
+```{r}
+#Snps with big differences
+# Top SNPs with largest absolute beta differences
+top_diff_snps <- merged %>%
+  arrange(desc(abs(beta_diff))) %>%
+  select(RSID, BETA_EUR, BETA_AFR, beta_diff) %>%
+  head(10)
+
+print(top_diff_snps)
+```
+
+```{r}
+# Bar plot of effect size differences
+top_SNP<-ggplot(top_diff_snps, aes(x = reorder(RSID, abs(beta_diff)), y = beta_diff, fill = beta_diff > 0)) +
+  geom_col() +
+  coord_flip() +  # Flip for easier reading
+  scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "tomato"), name = "Direction (EUR - AFR)") +
+  labs(title = "Top 10 SNPs with Largest Effect Size Differences (EUR vs AFR)",
+       x = "SNP (RSID)",
+       y = "Effect Size Difference (Beta_EUR - Beta_AFR)") +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(face = "bold")
+  )
+ggsave(filename = "./visualization/Top 10 SNPs with largest Effect Size Differences.pdf",
+       plot = top_SNP,
+       width = 10, height = 8)
+top_SNP
+```
+
+```{r, eval=FALSE}
+#It i better to check how many rows have NA and then remove such rows
+# Step 1: Count bad rows
+grep -c "NA" /scratch.global/pande250/GCD-8141/Project-4/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR
+
+# Step 2: Remove bad rows
+grep -v "NA" /scratch.global/pande250/GCD-8141/Project-4/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR > /scratch.global/pande250/GCD-8141/Project-4/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR.cleaned
+```
+To compute PRS, we need to ‘clump’ and prune association peaks to pick independent variants. 
+We will do this using plink. 
+Now lets re run the plink with the cleaned dataset
+```{r}
+system("/home/gcd8141/public/aazaidi/1kg_genotypes/plink2.1 --pfile /scratch.global/pande250/GCD-8141/Project-4/all_hg38 --clump-p1 5e-8 --clump-r2 0.1 --clump-kb 250 --clump /scratch.global/pande250/GCD-8141/Project-4/GIANT_HEIGHT_YENGO_2022_GWAS_SUMMARY_STATS_EUR.cleaned --clump-snp-field RSID --clump-field P --rm-dup exclude-all --out /scratch.global/pande250/GCD-8141/Project-4/output_folder/Yengo_height_EUR_clumped")
+```
+
+
+```{r}
+#Once we run the plink then we will read  in the clumped peaks and merge them 
+#with the GWAS data to output the effect sizes for PRScalculation.
+
+getwd()
+
+#Read the clumped SNPs-  this is the output file from PLINK clumping
+clumps = fread("./output_folder/Yengo_height_EUR_clumped.clumps")
+colnames(clumps)
+
+#Rename first column to "CHROM" for consistency
+colnames(clumps)[1] = "CHROM"
+
+#renaming the column RSID to ID in the eur data table so it can be merged with clumps ID column
+setnames(eur, old = "RSID", new = "ID")
+
+#to recover their BETA effect sizes and allele information needed for scoring.
+clumps = clumps[,.(ID)]
+
+#Merge the clumped SNPs (IDs) back with the full GWAS summary statistics (gwas2),
+clumps = merge(clumps, eur, by = "ID")
+colnames(clumps)
+
+#Write a clean PRS scoring file with only:ID (SNP RSID),A1 (effect allele), BETA (effect size).
+fwrite(clumps[, .(ID, EFFECT_ALLELE, BETA)], "./output_folder/GIANT_HEIGHT_clumped.effects", sep = "\t")
+colnames(clumps)
+```
+```{r}
+system("/home/gcd8141/public/aazaidi/1kg_genotypes/plink2.1 --pfile /scratch.global/pande250/GCD-8141/Project-4/all_hg38 --score /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_clumped.effects 1 2 3 header --out /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_clumped.prs")
+
+```
+So, so far we have computed polygenic risk scores (PRS) with plink2.1. next we will plot the PRS distribution across population
+```{r}
+prs <- fread("./output_folder/GIANT_HEIGHT_clumped.prs.sscore")
+head(prs)
+```
+
+```{r}
+#Standardize PRS Values, This helps with comparability across individuals and populations
+prs[, prs.scaled := scale(SCORE1_AVG)]
+
+prs_distribut<-ggplot(prs, aes(prs.scaled, fill = SuperPop))+
+ geom_density(alpha = 0.5)+ theme_classic()+
+ labs(x = "PRS", y = "Density", title = "PRS Distribution Across Populations") + 
+  theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename ="./visualization/PRS Distribution Across Populations.pdf",
+       plot = prs_distribut,
+       width = 10, height = 8)
+prs_distribut
+```
+```{r}
+prs_eur_vs_afr<-ggplot(prs[SuperPop %in% c("EUR", "AFR")], aes(prs.scaled, fill = SuperPop)) +
+  geom_density(alpha = 0.5) +
+  theme_classic() +
+  labs(x = "PRS", y = "Density", title = "PRS Distribution: EUR vs AFR") + 
+  theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+  
+
+ggsave(filename ="./visualization/PRS Distribution Across EUR vs AFR Populations.pdf",
+       plot = prs_eur_vs_afr,
+       width = 10, height = 8)
+prs_eur_vs_afr
+```
+#Fine mapping  
+Next for fine mapping I would select the SNp witht he biggest difference in effect size between european and african population.
+rs11645785 with beta difference of 10.239. I searched in the GTex portal and found that this SNP is located in the chromosome 16. its position is 47164632. so we will look for 500kb around this position
+ 
+```{r}
+#Define the region
+region_start <- 47164632 - 500000  # 46,664,632
+region_end   <- 47164632 + 500000  # 47,664,632
+
+#Subsetting the GWAS sumamry statistics
+locus_rs11645785 <- eur[CHR == 16 & POS > region_start & POS < region_end]
+
+#Converting the p value into numeric
+locus_rs11645785[, P := as.numeric(P)]
+
+#Plotting the regional association signal
+eur_fine_assoc_plot<-ggplot(locus_rs11645785, aes(POS, -log10(P))) +
+  geom_point() +
+  theme_classic() +
+  labs(x = "Position (hg38)", y = bquote(-Log[10]~"p-value"), title="PRS Distribution Across EUR vs AFR Populations") + 
+         theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename ="./visualization/PRS Distribution Across EUR vs AFR Populations.pdf",
+       plot = prs_eur_vs_afr,
+       width = 10, height = 8)
+
+eur_fine_assoc_plot
+```
+```{r}
+#output the rsids/snp ids for this region so we can select those snps for LD calculation
+fwrite(locus_rs11645785[, .(ID)], "./output_folder/rs11645785_locus.snps", col.names = FALSE)
+
+```
+#Note- LD matrix calcualtion from european population of 1k genome  
+SuSiE (or any fine-mapping using summary stats  and LD matrix) assumes- The LD matrix and the summary statistics were computed from the same or highly similar population. In my case the GWAS summary statistics (Yengo height) were from the GIANT consortium, which is European ancestry only.
+So, to match the population structure, my LD matrix must also be computed from EUR individuals.
+
+```{r}
+#
+system("awk -F'\t' -v OFS='\t' 'NR==1 || $5 == \"EUR\" {print $1}' /home/gcd8141/public/aazaidi/1kg_genotypes/all_hg38.psam > /scratch.global/pande250/GCD-8141/Project-4/output_folder/1kg_hg38.eur.iid")
+```
+Next we will run plink from the subsetted european population to Keeps only the SNPs in our fine-mapping region defined earlier, keep for only the european sample. 
+```{r}
+system("/home/gcd8141/public/aazaidi/1kg_genotypes/plink2.1 --pfile /home/gcd8141/public/aazaidi/1kg_genotypes/all_hg38 vzs --extract /scratch.global/pande250/GCD-8141/Project-4/output_folder/rs11645785_locus.snps --keep /scratch.global/pande250/GCD-8141/Project-4/output_folder/1kg_hg38.eur.iid --allow-extra-chr --make-pgen --out /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_rs11645785.snp")
+
+
+```
+```{r}
+#only compute LD for snps above maf 0.01
+system("/home/gcd8141/public/aazaidi/1kg_genotypes/plink2.1 --pfile /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_rs11645785.snp --maf 0.01 --r-unphased square zs ref-based --out /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_locusrs11645785_maf_0.01")
+
+```
+
+```{r}
+# #read in the vars file and make sure everything is ordered correctly.
+ldvars <- fread("/scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_locusrs11645785_maf_0.01.unphased.vcor1.vars", header = FALSE)
+colnames(ldvars) <- "rsid"
+
+# Read in the .pvar file, skipping header lines that start with "#"
+pvar <- fread(cmd = "grep -v '^#' /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_rs11645785.snp.pvar", header = FALSE, sep = "\t")
+
+# Keep the first 5 columns: CHROM, POS, ID, REF, ALT
+pvar <- pvar[, c(1:5)]
+
+# Rename columns for clarity
+colnames(pvar) <- c("CHR", "POS", "ID", "REF", "ALT")
+
+# Merge with GWAS summary statistics (locus1)
+pvar2 <- merge(pvar, locus_rs11645785,
+               by = c("ID"),
+               all.x = TRUE)
+
+#some snps may have been removed due to minor allele frequency cut off setc.
+# 1. Keep only SNPs with available BETA, remove the row where beta is NA
+ix.keep <- which(!is.na(pvar2$BETA))
+
+# 2. Subset to those
+pvar2 <- pvar2[ix.keep, ]
+
+
+# Flip signs if effect allele ≠ ref allele
+pvar2[EFFECT_ALLELE == REF, BETA_aligned := BETA]
+pvar2[EFFECT_ALLELE == ALT,  BETA_aligned := -BETA]
+
+# 4. Compute z-score
+pvar2[, z := BETA_aligned / SE]
+
+# 5. Merge with LD variable order
+pvar3 <- merge(ldvars, pvar2, by.x = "rsid", by.y = "ID", all.x = TRUE, sort = FALSE)
+
+```
+Next is Read in the LDmatrix and run susie
+
+```{r}
+#Loading the LD matrix
+ldmat <- fread(cmd = "zstdcat /scratch.global/pande250/GCD-8141/Project-4/output_folder/GIANT_HEIGHT_locusrs11645785_maf_0.01.unphased.vcor1.zst")
+ldmat <- as.matrix(ldmat)
+
+# Ensure row and column names match SNP IDs
+rownames(ldmat) <- colnames(ldmat)
+
+# OPTIONAL: Subset LD matrix if needed
+# ldmat <- ldmat[ix.keep, ix.keep]  # only if you filtered SNPs earlier
+# ldmat[is.na(ldmat)] <- 0          # set missing to 0 (not always needed)
+
+
+# Compute sample size from GWAS
+sample_size <- median(pvar3$N, na.rm = TRUE)
+
+pvar3$z <- as.numeric(pvar3$z)
+
+#since the dimension didnot match betwen ldmat and pvar/ var has 2 rows extra. so there must be some extra or #duplicates. To see the duplicate one
+pvar3[which(duplicated(rsid)==TRUE)]
+
+# Remove duplicated rsid (keep the first occurrence)
+pvar3 <- pvar3[!duplicated(pvar3$rsid), ]
+
+
+# Run SuSiE using z-scores and LD matrix
+test <- susie_rss(z = pvar3$z, R = ldmat, n = sample_size)
+
+# Extract credible sets (SNP indices for putative causal variants)
+cs_sets <- unlist(test$sets$cs)
+```
+
+
+```{r}
+fine_map_plot<- ggplot(pvar3,aes(POS.x,-log10(P)))+
+ geom_point()+
+ geom_point(data=pvar3[cs_sets,], aes(POS.x,-log10(P)),color=cs_sets)+ 
+  theme_classic()+
+ labs(x = "Position (hg38)", y = bquote(-Log[10]~"p-value"), title="Fine mapping of top SNP rs11645785") +
+  theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename ="./visualization/Fine mapping of top SNP rs11645785.pdf",
+       plot = fine_map_plot,
+       width = 10, height = 8)
+
+fine_map_plot
+
+```
+
