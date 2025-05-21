@@ -28,6 +28,7 @@ The key components of the project include:
 - **Software:** `plink2.1`, `susieR`, R packages including `ggplot2`, `data.table`
 
 ## 📁 Repository Structure  
+'''
 PRS-Finemapping-Height-GCD 8141  
 ├── report/
 │ ├── Project-4-GCD-Report.pdf # Final project report
@@ -41,6 +42,7 @@ PRS-Finemapping-Height-GCD 8141
 │ ├── Top_10_SNPs #top 10 SNps with largest effect size difference in european and african in giant 2022
 │ ├──  PRS_distribution #PRS distribution across 1k genome european and african population
 │ └── fine_mapping_rs11645785.png # Regional finemapping of top SNP rs11645785 in giant consortium
+'''
 
 ## 📜 License
 This project is for academic use and coursework submission only. Do not reuse without permission.
