@@ -27,12 +27,8 @@ The key components of the project include:
 - **Genotypes:** 1000 Genomes Phase 3
 - **Software:** `plink2.1`, `susieR`, R packages including `ggplot2`, `data.table`
 
-## 📁 Repository Structure
-PRS-Finemapping-Height-GCD 8141
-├── data/
-│ ├── giant_summary_stats.txt # Summary statistics from GIANT consortium (Yengo 2022)
-│ └── 1000G_EUR_AFR_genotypes/ # Genotype data for European and African populations
-│
+## 📁 Repository Structure  
+PRS-Finemapping-Height-GCD 8141  
 ├── report/
 │ ├── Project-4-GCD-Report.pdf # Final project report
 │ └── Project4_GCD8814.Rmd # Annotated R Markdown file with full analysis pipeline
