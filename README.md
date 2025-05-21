@@ -29,7 +29,6 @@ The key components of the project include:
 
 ## 📁 Repository Structure  
 '''
-PRS-Finemapping-Height-GCD 8141  
 ├── report/
 │ ├── Project-4-GCD-Report.pdf # Final project report
 │ └── Project4_GCD8814.Rmd # Annotated R Markdown file with full analysis pipeline
