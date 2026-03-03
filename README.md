@@ -1,7 +1,12 @@
 # Polygenic-Risk-Score-Analysis-and-Fine-mapping  
 # Polygenic Risk Score Analysis and Fine-Mapping of Height-associated Variants Across European and African Populations
 
-Polygenic risk scores are increasingly used in clinical research and population health studies; however, their predictive performance varies across ancestral groups. This repository documents the development of a reproducible computational framework for polygenic risk score (PRS) construction and fine-mapping of genetic variants across diverse ancestral populations. All analyses, visualizations, and interpretations are original work by Rachana Pandey.
+Polygenic risk scores are increasingly used in clinical research and population health studies; however, their predictive performance varies across ancestral groups. This repository documents the development of a reproducible computational framework for polygenic risk score (PRS) construction and fine-mapping of genetic variants across diverse ancestral populations. Height is used here for demonstration, the pipeline can be adapted to any trait with available GWAS summary statistics such as: Type 2 Diabetes, cancers, coronary artery disease. To do so:  
+1. Replace `height_sumstats.txt.gz` with your summary statistics
+2. Ensure the same column formatting (CHR, BP, SNP, A1, A2, BETA/OR, SE, P)
+3. Run scripts in the order shown under `scripts/`
+4. Evaluate PRS performance in your validation cohorts
+5. All analyses, visualizations, and interpretations are original work by Rachana Pandey.
 
 ## 📘 Project Overview and Methodology
 
