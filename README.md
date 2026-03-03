@@ -47,6 +47,11 @@ The key components of the project include:
 │ ├──  PRS_distribution #PRS distribution across 1k genome european and african population
 │ └── fine_mapping_rs11645785.png # Regional finemapping of top SNP rs11645785 in giant consortium
 ```
+## References  
+1. Yengo, L., Vedantam, S., Marouli, E., Sidorenko, J., Bartell, E., Sakaue, S., ... & Lee, J. Y. (2022). A saturated map of common genetic variants associated with human height. Nature, 610(7933), 704-712.
+2. Wang, G., Sarkar, A., Carbonetto, P., & Stephens, M. (2020). A simple new approach to variable selection in regression, with application to genetic fine mapping. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(5), 1273-1300.
+3. Chang, C. C., Chow, C. C., Tellier, L. C., Vattikuti, S., Purcell, S. M., & Lee, J. J. (2015). Second-generation PLINK: rising to the challenge of larger and richer datasets. Gigascience, 4(1), s13742-015.
+
 
 ## 📜 License
 This project is for academic use and coursework submission only. Do not reuse without permission.
