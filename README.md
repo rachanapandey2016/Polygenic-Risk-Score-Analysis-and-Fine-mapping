@@ -21,10 +21,10 @@ All analyses, visualizations, and interpretations are original work by Rachana P
  **1. GWAS Visualization**  
  - To visualize genome-wide association signals and assess potential $p$-value inflation, Manhattan and Q-Q plots were generated using the **ggplot2** framework. 
  - These visualizations utilize summary statistics from the GIANT Consortium height GWAS to evaluate the distribution of association signals and identify significant deviations from the null distribution across the genome.
-<p align="center">
+<p align="left">
   <img src="results/manhattan_plot.png" width="600">
 </p>
-<p align="center">
+<p align="left">
   <img src="results/qq_plot.png" width="600">
 </p>
 
@@ -34,11 +34,11 @@ All analyses, visualizations, and interpretations are original work by Rachana P
  - The distribution of these differences was visualized to assess the magnitude of population-specific variation.
  - The top SNPs with the largest effect size differences were identified and visualized.
 
-<p align="center">
+<p align="left">
   <img src="results/effect_size_diff.png" width="550">
 </p>  
 
-<p align="center">
+<p align="left">
   <img src="results/Top_10_SNPs.png" width="550">
 </p>  
 
