@@ -14,7 +14,7 @@ Human height is a complex polygenic trait shaped by numerous genetic variants wi
 1. Replace `height_sumstats.txt.gz` with your summary statistics
 2. Ensure the same column formatting (CHR, BP, SNP, A1, A2, BETA/OR, SE, P)
 3. Run scripts in the order shown under `scripts/`
-4. Evaluate PRS performance in your validation cohorts
+4. Evaluate PRS performance in your validation cohorts.
 All analyses, visualizations, and interpretations are original work by Rachana Pandey.
 
  ## Methods  
