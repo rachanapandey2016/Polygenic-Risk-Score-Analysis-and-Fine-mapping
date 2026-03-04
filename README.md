@@ -21,7 +21,7 @@ All analyses, visualizations, and interpretations are original work by Rachana P
  **1. GWAS Visualization**  
  - To visualize genome-wide association signals and assess potential $p$-value inflation, Manhattan and Q-Q plots were generated using the **ggplot2** framework. 
  - These visualizations utilize summary statistics from the GIANT Consortium height GWAS to evaluate the distribution of association signals and identify significant deviations from the null distribution across the genome.
-![Brief alt text](results/manhattan_plot.png)
+![Manhattan Plot](results/manhattan_plot.png)
 
  **2.Effect Size Comparison Across Populations**  
  - Effect sizes from the European and African GWAS datasets were compared to evaluate ancestry-specific genetic differences.
