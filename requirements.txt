@@ -1,0 +1,19 @@
+Software Requirements
+
+R >= 4.2
+
+R packages:
+dplyr
+data.table
+ggplot2
+susieR
+
+External tools:
+PLINK2
+awk
+wget
+zstd
+
+Datasets:
+GIANT Height GWAS summary statistics (Yengo et al., 2022)
+1000 Genomes Project hg38 genotype data
