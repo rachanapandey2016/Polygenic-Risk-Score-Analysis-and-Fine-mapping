@@ -24,9 +24,10 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 <p align="center">
   <img src="results/manhattan_plot.png" width="700", heigh=800>
 </p>
+<p align="center">
+  <img src="results/qq_plot.png" width="700", heigh=800>
+</p>
 
-![Manhattan Plot](results/manhattan_plot.png)
-![qq Plot](results/qq_plot.png) 
 
  **2.Effect Size Comparison Across Populations**  
  - Effect sizes from the European and African GWAS datasets were compared to evaluate ancestry-specific genetic differences.
