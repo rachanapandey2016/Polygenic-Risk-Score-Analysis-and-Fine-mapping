@@ -53,6 +53,9 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 
 **4. PRS Transferability Analysis**  
 - PRS distributions between European (EUR) and African (AFR) populations were compared using density plots generated with ggplot2.
+<p align="left">
+  <img src="results/PRS_distribution.png" width="550">
+</p> 
 
 **5. Fine Mapping of Candidate Loci**  
 - Fine mapping was performed for the SNP with the largest effect size difference between populations (rs11645785).
@@ -60,6 +63,9 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 - Linkage disequilibrium matrices were computed using genotype data from European individuals in the 1000 Genomes dataset.
 - Statistical fine mapping was performed using the **SuSiE** (Sum of Single Effects) model implemented in the **susieR** R package.
 - This approach identifies credible sets of candidate causal variants within the locus.
+<p align="left">
+  <img src="results/fine_mapping_rs11645785.png" width="550">
+</p> 
 
 ## 🧪 Major Findings
 
