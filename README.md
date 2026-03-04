@@ -35,7 +35,7 @@ All analyses, visualizations, and interpretations are original work by Rachana P
  - The top SNPs with the largest effect size differences were identified and visualized.
 
 <p align="center">
-  <img src="results/effect_size_diff.png" width="600">
+  <img src="results/effect_size_diff.png" width="400">
 </p>  
 
 
