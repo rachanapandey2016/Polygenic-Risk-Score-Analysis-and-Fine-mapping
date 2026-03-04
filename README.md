@@ -21,6 +21,7 @@ All analyses, visualizations, and interpretations are original work by Rachana P
  **1. GWAS Visualization**  
  - To visualize genome-wide association signals and assess potential $p$-value inflation, Manhattan and Q-Q plots were generated using the **ggplot2** framework. 
  - These visualizations utilize summary statistics from the GIANT Consortium height GWAS to evaluate the distribution of association signals and identify significant deviations from the null distribution across the genome.
+![Brief alt text](results/manhattan_plot.png)
 
  **2.Effect Size Comparison Across Populations**  
  - Effect sizes from the European and African GWAS datasets were compared to evaluate ancestry-specific genetic differences.
@@ -83,6 +84,14 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 │ ├── Fine_mapping.R
 
 ```
+## Run the scripts in given order  
+1. data_download.sh
+2. GWAS_visualization.R
+3. EUR_AFR_effect_size_diff.R
+4. Plink_clumping.sh
+5. PRS_pipeline.R
+6. Fine_mapping.R
+
 ## References  
 1. Yengo, L., Vedantam, S., Marouli, E., Sidorenko, J., Bartell, E., Sakaue, S., ... & Lee, J. Y. (2022). A saturated map of common genetic variants associated with human height. Nature, 610(7933), 704-712.
 2. Wang, G., Sarkar, A., Carbonetto, P., & Stephens, M. (2020). A simple new approach to variable selection in regression, with application to genetic fine mapping. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(5), 1273-1300.
