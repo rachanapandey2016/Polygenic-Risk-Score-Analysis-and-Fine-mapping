@@ -62,8 +62,8 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 ## 📁 Repository Structure  
 ```
 ├── report/
-│ ├── Project-4-GCD-Report.pdf # Final project report
-│ └── Project4_GCD8814.Rmd # Annotated R Markdown file with full analysis pipeline
+│ ├── Analysis-Report.pdf # Final report
+│ └── Analysis.Rmd # Annotated R Markdown file with full analysis pipeline
 │
 ├── results/
 │ ├── manhattan_plot.png # manhattan plot for height GWAS across all population in giant consortium
@@ -73,6 +73,15 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 │ ├── Top_10_SNPs #top 10 SNps with largest effect size difference in european and african in giant 2022
 │ ├──  PRS_distribution #PRS distribution across 1k genome european and african population
 │ └── fine_mapping_rs11645785.png # Regional finemapping of top SNP rs11645785 in giant consortium
+│
+├── scripts/
+│ ├── data_download.sh
+│ ├── GWAS_visualization.R
+│ ├── EUR_AFR_effect_size_diff.R
+│ ├── Plink_clumping.sh
+│ ├── PRS_pipeline.R
+│ ├── Fine_mapping.R
+
 ```
 ## References  
 1. Yengo, L., Vedantam, S., Marouli, E., Sidorenko, J., Bartell, E., Sakaue, S., ... & Lee, J. Y. (2022). A saturated map of common genetic variants associated with human height. Nature, 610(7933), 704-712.
