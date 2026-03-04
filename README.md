@@ -28,12 +28,16 @@ All analyses, visualizations, and interpretations are original work by Rachana P
   <img src="results/qq_plot.png" width="700">
 </p>
 
-
  **2.Effect Size Comparison Across Populations**  
  - Effect sizes from the European and African GWAS datasets were compared to evaluate ancestry-specific genetic differences.
  - SNP effect size differences for were calculated as: beta_difference = beta_EUR − beta_AFR.
  - The distribution of these differences was visualized to assess the magnitude of population-specific variation.
  - The top SNPs with the largest effect size differences were identified and visualized.
+
+<p align="center">
+  <img src="results/effect_size_diff.png" width="600">
+</p>  
+
 
 **3.Polygenic Risk Score Construction** 
 - Polygenic risk scores were constructed via the clumping and thresholding (C+T) approach using PLINK2.1.
