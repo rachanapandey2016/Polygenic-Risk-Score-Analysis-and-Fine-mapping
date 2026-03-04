@@ -53,9 +53,6 @@ The key components of the project include:
 3. Chang, C. C., Chow, C. C., Tellier, L. C., Vattikuti, S., Purcell, S. M., & Lee, J. J. (2015). Second-generation PLINK: rising to the challenge of larger and richer datasets. Gigascience, 4(1), s13742-015.
 
 
-## 📜 License
-This project is for academic use and coursework submission only. Do not reuse without permission.
-
 ## 🙋‍♀️ Author
 **Rachana Pandey**  
 PhD Student, Translational Bioinformatics  
