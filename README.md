@@ -18,7 +18,10 @@ Human height is a complex polygenic trait shaped by numerous genetic variants wi
 All analyses, visualizations, and interpretations are original work by Rachana Pandey.
 
  ## Methods  
- **GWAS Visualization**
+ **1. GWAS Visualization**  
+ - For the GWAS SNPs visualization, Manhattan plots and QQ plots were generated using the ggplot2 package from GIANT consortium height GWAS summary statistics.
+ - 
+ 
 
 For the GWAS SNPs visualization, Manhattan plots and QQ plots were generated from the summary statistics to visualize genome-wide association signals and assess p-value inflation from GIANT consortium. Effect size differences for height between European and African population from GIANT consortium was visualized using histogram. Then for the PRS calculation using the European summary statistics from Giant, independent SNPs were selected via clumping using plink2.1, with a p-value threshold of 5×10−8 and an LD threshold of r2<0.1. 1000 Genomes Project Phase 3 genotypes were used for PRS computation and LD estimation, focusing on EUR and AFR populations. SNP effect sizes from the GIANT summary statistics were used to calculate PRS for each individual population. The PRS distribution differences were visualized using density plot. Similarly, for fine mapping a top SNP (rs11645785) with largest effect size difference between European and African population was selected, and a 500kb window was fine mapped using the susieR package to compute credible sets of likely causal variants. 
 
