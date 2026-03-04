@@ -36,15 +36,22 @@ All analyses, visualizations, and interpretations are original work by Rachana P
   **Clumping window:** $250$ kb
 - European GWAS effect sizes from the GIANT consortium were used as weights to calculate PRS for individuals in the 1000 Genomes Project dataset.
 
-For the GWAS SNPs visualization, Manhattan plots and QQ plots were generated from the summary statistics to visualize genome-wide association signals and assess p-value inflation from GIANT consortium. Effect size differences for height between European and African population from GIANT consortium was visualized using histogram. Then for the PRS calculation using the European summary statistics from Giant, independent SNPs were selected via clumping using plink2.1, with a p-value threshold of 5×10−8 and an LD threshold of r2<0.1. 1000 Genomes Project Phase 3 genotypes were used for PRS computation and LD estimation, focusing on EUR and AFR populations. SNP effect sizes from the GIANT summary statistics were used to calculate PRS for each individual population. The PRS distribution differences were visualized using density plot. Similarly, for fine mapping a top SNP (rs11645785) with largest effect size difference between European and African population was selected, and a 500kb window was fine mapped using the susieR package to compute credible sets of likely causal variants. 
+**4. PRS Transferability Analysis**  
+- PRS distributions between European (EUR) and African (AFR) populations were compared using density plots generated with ggplot2.
 
+**5. Fine Mapping of Candidate Loci**  
+- Fine mapping was performed for the SNP with the largest effect size difference between populations (rs11645785).
+- A genomic region spanning ±500 kb around the SNP was extracted.
+- Linkage disequilibrium matrices were computed using genotype data from European individuals in the 1000 Genomes dataset.
+- Statistical fine mapping was performed using the **SuSiE** (Sum of Single Effects) model implemented in the **susieR** R package.
+- This approach identifies credible sets of candidate causal variants within the locus.
 
 ## 🧪 Major Findings
 
-- **GWAS Visualization:** Manhattan and QQ plots revealed strong polygenic signals for height, with significant inflation at the tail end of p-values.
-- **Ancestry Differences:** While most SNP effect sizes were similar across populations, a subset of top 10 SNPs showed large ancestry-specific effects.
-- **PRS Transferability:** PRS scores were significantly higher in EUR compared to AFR populations when using EUR-derived summary stats—highlighting the challenge of cross-ancestry PRS transferability.
-- **Fine-Mapping:** Fine-mapping around the SNP rs11645785 (which had the largest effect size difference) identified a credible set of causal variants, likely due to extended LD in EUR populations.
+- **GWAS Visualization:** Manhattan and QQ plots revealed multiple strong polygenic signals for height, with significant inflation at the tail end of p-values.
+- **Effect Size Differences:** Most SNPs showed similar effect sizes across populations, but a subset(10 SNPs) exhibited substantial differences between European and African populations.
+- **PRS Distributions and Transferability:** PRS distributions differed between populations. PRS scores were significantly higher in EUR compared to AFR populations when using EUR-derived summary stats—highlighting the challenge of cross-ancestry PRS transferability.
+- **Fine-Mapping:** Fine-mapping around the SNP rs11645785 (which had the largest effect size difference) identified a credible set of causal variants. Because variants within the region are in strong linkage disequilibrium, statistical fine-mapping cannot isolate a single causal variant and instead identifies a credible set of candidates.
 
 ## 🧰 Tools and Data
 
