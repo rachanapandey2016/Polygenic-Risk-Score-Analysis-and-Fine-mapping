@@ -19,8 +19,26 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 
  ## Methods  
  **1. GWAS Visualization**  
- - For the GWAS SNPs visualization, Manhattan plots and QQ plots were generated using the ggplot2 package from GIANT consortium height GWAS summary statistics.
- - 
+ - To visualize genome-wide association signals and assess potential $p$-value inflation, Manhattan and Q-Q plots were generated using the ggplot2 framework. 
+ - These visualizations utilize summary statistics from the GIANT Consortium height GWAS to evaluate the distribution of association signals and identify significant deviations from the null distribution across the genome.
+
+ **2.Effect Size Comparison Across Populations**  
+ - Effect sizes from the European and African GWAS datasets were compared to evaluate ancestry-specific genetic differences.
+ - SNP effect size differences for were calculated as: beta_difference = beta_EUR − beta_AFR.
+ - The distribution of these differences was visualized to assess the magnitude of population-specific variation.
+ - The top SNPs with the largest effect size differences were identified and visualized.
+
+**3.Polygenic Risk Score Construction** 
+- Polygenic risk scores were constructed via the clumping and thresholding (C+T) approach using PLINK2.1.
+- Independent SNPs were selected using linkage disequilibrium (LD)-based clumping with the following parameters:
+
+\begin{itemize}
+\item p-value threshold: $p < 5 \times 10^{-8}$
+\item LD threshold: $r^{2} < 0.1$
+\item clumping window size: 250 kb
+\end{itemize}
+
+Effect sizes from the European GWAS summary statistics were used as weights to compute polygenic risk scores (PRS) for individuals in the 1000 Genomes dataset.
  
 
 For the GWAS SNPs visualization, Manhattan plots and QQ plots were generated from the summary statistics to visualize genome-wide association signals and assess p-value inflation from GIANT consortium. Effect size differences for height between European and African population from GIANT consortium was visualized using histogram. Then for the PRS calculation using the European summary statistics from Giant, independent SNPs were selected via clumping using plink2.1, with a p-value threshold of 5×10−8 and an LD threshold of r2<0.1. 1000 Genomes Project Phase 3 genotypes were used for PRS computation and LD estimation, focusing on EUR and AFR populations. SNP effect sizes from the GIANT summary statistics were used to calculate PRS for each individual population. The PRS distribution differences were visualized using density plot. Similarly, for fine mapping a top SNP (rs11645785) with largest effect size difference between European and African population was selected, and a 500kb window was fine mapped using the susieR package to compute credible sets of likely causal variants. 
