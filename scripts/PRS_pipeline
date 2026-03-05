@@ -1,0 +1,70 @@
+
+library(dplyr)
+library(data.table)
+library(ggplot2)
+
+dir.create("visualization", showWarnings = FALSE, recursive = TRUE)
+dir.create("output_folder", showWarnings = FALSE, recursive = TRUE)
+
+eur <- fread("./eur_cleaned.tsv")
+
+#Read the clumped SNPs-  this is the output file from PLINK clumping
+clumps = fread("./output_folder/Yengo_height_EUR_clumped.clumps")
+colnames(clumps)
+
+#Rename first column to "CHROM" for consistency
+colnames(clumps)[1] = "CHROM"
+
+#renaming the column RSID to ID in the eur data table so it can be merged with clumps ID column
+setnames(eur, old = "RSID", new = "ID")
+
+#to recover their BETA effect sizes and allele information needed for scoring.
+clumps = clumps[,.(ID)]
+
+#Merge the clumped SNPs (IDs) back with the full GWAS summary statistics (gwas2),
+clumps = merge(clumps, eur, by = "ID")
+colnames(clumps)
+
+#Write a clean PRS scoring file with only:ID (SNP RSID),A1 (effect allele), BETA (effect size).
+fwrite(clumps[, .(ID, EFFECT_ALLELE, BETA)], "./output_folder/GIANT_HEIGHT_clumped.effects", sep = "\t")
+colnames(clumps)
+
+3AFter this run the PRS_score in bash in interactive mode or by scheduling the job to get the prs score
+
+prs <- fread("./output_folder/GIANT_HEIGHT_clumped.prs.sscore")
+head(prs)
+
+#Standardize PRS Values, This helps with comparability across individuals and populations
+prs[, prs.scaled := scale(SCORE1_AVG)]
+
+prs_distribut<-ggplot(prs, aes(prs.scaled, fill = SuperPop))+
+ geom_density(alpha = 0.5)+ theme_classic()+
+ labs(x = "PRS", y = "Density", title = "PRS Distribution Across Populations") + 
+  theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+
+ggsave(filename ="./visualization/PRS Distribution Across Populations.pdf",
+       plot = prs_distribut,
+       width = 10, height = 8)
+prs_distribut
+
+prs_eur_vs_afr<-ggplot(prs[SuperPop %in% c("EUR", "AFR")], aes(prs.scaled, fill = SuperPop)) +
+  geom_density(alpha = 0.5) +
+  theme_classic() +
+  labs(x = "PRS", y = "Density", title = "PRS Distribution: EUR vs AFR") + 
+  theme(
+  axis.text.x = element_text(size = 12, face = "bold"),
+  axis.text.y = element_text(size = 12, face = "bold"),     
+  axis.title.x = element_text(size = 12, face = "bold"),    
+  axis.title.y = element_text(size = 12, face = "bold"),    
+  plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+  
+
+ggsave(filename ="./visualization/PRS Distribution Across EUR vs AFR Populations.pdf",
+       plot = prs_eur_vs_afr,
+       width = 10, height = 8)
+prs_eur_vs_afr
