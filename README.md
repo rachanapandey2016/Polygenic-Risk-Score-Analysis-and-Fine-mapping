@@ -103,6 +103,9 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 │ ├── PRS_pipeline.R
 │ ├─  PRS_score.sh
 │ ├── Fine_mapping.R
+│ 
+│── README.md
+│── requirements.txt
 
 ```
 ## Run the scripts in given order  
