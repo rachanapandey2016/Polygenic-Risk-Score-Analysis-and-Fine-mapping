@@ -9,7 +9,7 @@ ggplot2
 susieR
 
 External tools:
-PLINK2
+PLINK2.1
 awk
 wget
 zstd
