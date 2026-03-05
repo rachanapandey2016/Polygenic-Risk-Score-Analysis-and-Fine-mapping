@@ -101,6 +101,7 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 │ ├── EUR_AFR_effect_size_diff.R
 │ ├── Plink_clumping.sh
 │ ├── PRS_pipeline.R
+│ ├─  PRS_score.sh
 │ ├── Fine_mapping.R
 
 ```
@@ -110,7 +111,8 @@ All analyses, visualizations, and interpretations are original work by Rachana P
 3. EUR_AFR_effect_size_diff.R
 4. Plink_clumping.sh
 5. PRS_pipeline.R
-6. Fine_mapping.R
+6. PRS_score.sh
+7. Fine_mapping.R
 
 ## References  
 1. Yengo, L., Vedantam, S., Marouli, E., Sidorenko, J., Bartell, E., Sakaue, S., ... & Lee, J. Y. (2022). A saturated map of common genetic variants associated with human height. Nature, 610(7933), 704-712.
